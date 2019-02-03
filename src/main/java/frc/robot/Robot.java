@@ -108,7 +108,7 @@ public class Robot extends TimedRobot {
     m_robotDrive.driveCartesian(m_stick.SmoothAxis(m_controllerDriver.getRawAxis(1)), 
                                 m_stick.SmoothAxis(m_controllerDriver.getRawAxis(0)), 
                                 m_stick.SmoothAxis(m_controllerDriver.getRawAxis(4)));
-    m_liftMotor.set(m_stick.SmoothAxis(m_controllerDriver.getTriggerAxis(GenericHID.Hand.kLeft)) - m_stick.SmoothAxis(m_controllerDriver.getTriggerAxis(GenericHID.Hand.kRight)));
+    m_liftMotor.set(m_stick.SmoothAxis(m_controllerDriver.getTriggerAxis(GenericHID.Hand.kRight)) - m_stick.SmoothAxis(m_controllerDriver.getTriggerAxis(GenericHID.Hand.kLeft)));
 
 
 
