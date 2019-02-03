@@ -7,7 +7,7 @@
 
 package frc.robot;
 
-
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.GenericHID;// <-- Needed for xbox style controllers
 import edu.wpi.first.wpilibj.Spark;
