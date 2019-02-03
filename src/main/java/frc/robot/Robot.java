@@ -8,7 +8,7 @@
 package frc.robot;
 
 
-
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.GenericHID;// <-- Needed for xbox style controllers
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedController;
@@ -20,8 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;// <-- For writing da
 
 /**
  * This is a demo program showing how to use Mecanum control with the RobotDrive
- * class.  It's been modifed to call the Spark controllers, which use the can bus, 
- * instead of PWM.  
+ * class.  It's been modifed to call the Spark controllers, which use PWM. 
  */
 public class Robot extends TimedRobot {
   // These will need to be updated to the CAN Ids of the Spark's
@@ -64,7 +63,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-
+    CameraServer.getInstance().startAutomaticCapture();
+    
     Spark frontLeftSpark = new Spark(kFrontLeftChannel);
     Spark frontRightSpark = new Spark(kFrontRightChannel);
     Spark rearLeftSpark = new Spark(kRearLeftChannel);
@@ -85,11 +85,6 @@ public class Robot extends TimedRobot {
     // m_controllerDriver = new Joystick(kJoystickChannel);
     
     m_controllerDriver = new XboxController(kGamePadChannel);
-
-    /**
-     * Added to test out setting talon config some settings internal
-     * to the Sparks
-     */
 
 
     m_stick = new DeadBand();
