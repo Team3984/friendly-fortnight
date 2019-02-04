@@ -7,7 +7,7 @@
 
 package frc.robot;
 
-import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.GenericHID;// <-- Needed for xbox style controllers
 import edu.wpi.first.wpilibj.Spark;
@@ -33,6 +33,9 @@ public class Robot extends TimedRobot {
   // What ever USB port we have the controller plugged into.
   private static int kGamePadChannel = 0;
 
+  //mapping out the camera
+  private static int kUsbCameraChannel = 0;
+
   //Lets map out the buttons
   //private static final int kXboxButtonA = 1;
   //private static final int kXboxButtonB = 2;
@@ -46,6 +49,8 @@ public class Robot extends TimedRobot {
 
   //private static final double kRampUpRate = 0.0; // The rate that the motor controller will speed up to full;
   
+
+  private UsbCamera m_camera;
 
   private MecanumDrive m_robotDrive;
 
@@ -67,7 +72,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    CameraServer.getInstance().startAutomaticCapture();
+
+    UsbCamera m_camera = CameraServer.getInstance().startAutomaticCapture(kUsbCameraChannel);
+    m_camera.setResolution(240, 180);
+
+    //m_camera.setVideoMode(VideoMode.PixelFormat.kYUYV,320,180,30);
+
     
     Spark frontLeftSpark = new Spark(kFrontLeftChannel);
     Spark frontRightSpark = new Spark(kFrontRightChannel);
