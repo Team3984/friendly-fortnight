@@ -7,7 +7,7 @@
 
 package frc.robot;
 
-
+import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.GenericHID;// <-- Needed for xbox style controllers
 import edu.wpi.first.wpilibj.Spark;
@@ -33,6 +33,9 @@ public class Robot extends TimedRobot {
   // What ever USB port we have the controller plugged into.
   private static int kGamePadChannel = 0;
 
+  //mapping out the camera
+  private static int kUsbCameraChannel = 0;
+
   //Lets map out the buttons
   //private static final int kXboxButtonA = 1;
   //private static final int kXboxButtonB = 2;
@@ -41,17 +44,23 @@ public class Robot extends TimedRobot {
 
   //private static final int kXboxButtonLB = 5; // <-- Left Button
   //private static final int kXboxButtonRB = 6; // <-- Right Button
-  //private static final int kXboxButtonLT = 2; // <-- Left Trigger
-  //private static final int kXboxButtonRT = 3; // <-- Right Trigger
+  private static final int kXboxButtonLT = 2; // <-- Left Trigger
+  private static final int kXboxButtonRT = 3; // <-- Right Trigger
 
   //private static final double kRampUpRate = 0.0; // The rate that the motor controller will speed up to full;
   
 
+  private UsbCamera m_camera;
+
   private MecanumDrive m_robotDrive;
 
-  private XboxController m_controllerDriver;
+  private GenericHID m_controllerDriver;
 
   private DeadBand m_stick;
+  
+  private DeadBand m_leftTrigger;
+  
+  private DeadBand m_rightTrigger;
 
   private SpeedController m_liftMotor;
 
@@ -63,7 +72,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    CameraServer.getInstance().startAutomaticCapture();
+
+    UsbCamera m_camera = CameraServer.getInstance().startAutomaticCapture(kUsbCameraChannel);
+    m_camera.setResolution(240, 180);
+
+    //m_camera.setVideoMode(VideoMode.PixelFormat.kYUYV,320,180,30);
+
     
     Spark frontLeftSpark = new Spark(kFrontLeftChannel);
     Spark frontRightSpark = new Spark(kFrontRightChannel);
@@ -85,7 +99,10 @@ public class Robot extends TimedRobot {
     // m_controllerDriver = new Joystick(kJoystickChannel);
     
     m_controllerDriver = new XboxController(kGamePadChannel);
-
+    
+    m_leftTrigger = new DeadBand();
+    
+    m_rightTrigger = new DeadBand();
 
     m_stick = new DeadBand();
   
@@ -103,7 +120,7 @@ public class Robot extends TimedRobot {
     m_robotDrive.driveCartesian(m_stick.SmoothAxis(m_controllerDriver.getRawAxis(1)), 
                                 m_stick.SmoothAxis(m_controllerDriver.getRawAxis(0)), 
                                 m_stick.SmoothAxis(m_controllerDriver.getRawAxis(4)));
-    m_liftMotor.set(m_stick.SmoothAxis(m_controllerDriver.getTriggerAxis(GenericHID.Hand.kRight)) - m_stick.SmoothAxis(m_controllerDriver.getTriggerAxis(GenericHID.Hand.kLeft)));
+    m_liftMotor.set(m_leftTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonLT)) - m_rightTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonRT)));
 
 
 
