@@ -49,9 +49,13 @@ public class Robot extends TimedRobot {
 
   private MecanumDrive m_robotDrive;
 
-  private XboxController m_controllerDriver;
+  private GenericHID m_controllerDriver;
 
   private DeadBand m_stick;
+  
+  private DeadBand m_leftTrigger;
+  
+  private DeadBand m_rightTrigger;
 
   private SpeedController m_liftMotor;
 
@@ -84,8 +88,11 @@ public class Robot extends TimedRobot {
 
     // m_controllerDriver = new Joystick(kJoystickChannel);
     
-    m_controllerDriver = new GenericHID(kGamePadChannel);
-
+    m_controllerDriver = new XboxController(kGamePadChannel);
+    
+    m_leftTrigger = new DeadBand();
+    
+    m_rightTrigger = new DeadBand();
 
     m_stick = new DeadBand();
   
@@ -103,7 +110,7 @@ public class Robot extends TimedRobot {
     m_robotDrive.driveCartesian(m_stick.SmoothAxis(m_controllerDriver.getRawAxis(1)), 
                                 m_stick.SmoothAxis(m_controllerDriver.getRawAxis(0)), 
                                 m_stick.SmoothAxis(m_controllerDriver.getRawAxis(4)));
-    m_liftMotor.set(m_stick.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonLT)) - m_stick.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonRT)));
+    m_liftMotor.set(m_leftTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonLT)) - m_rightTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonRT)));
 
 
 
