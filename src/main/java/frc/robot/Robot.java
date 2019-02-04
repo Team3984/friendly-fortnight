@@ -41,8 +41,8 @@ public class Robot extends TimedRobot {
 
   //private static final int kXboxButtonLB = 5; // <-- Left Button
   //private static final int kXboxButtonRB = 6; // <-- Right Button
-  //private static final int kXboxButtonLT = 2; // <-- Left Trigger
-  //private static final int kXboxButtonRT = 3; // <-- Right Trigger
+  private static final int kXboxButtonLT = 2; // <-- Left Trigger
+  private static final int kXboxButtonRT = 3; // <-- Right Trigger
 
   //private static final double kRampUpRate = 0.0; // The rate that the motor controller will speed up to full;
   
@@ -84,7 +84,7 @@ public class Robot extends TimedRobot {
 
     // m_controllerDriver = new Joystick(kJoystickChannel);
     
-    m_controllerDriver = new XboxController(kGamePadChannel);
+    m_controllerDriver = new GenericHID(kGamePadChannel);
 
 
     m_stick = new DeadBand();
@@ -103,7 +103,7 @@ public class Robot extends TimedRobot {
     m_robotDrive.driveCartesian(m_stick.SmoothAxis(m_controllerDriver.getRawAxis(1)), 
                                 m_stick.SmoothAxis(m_controllerDriver.getRawAxis(0)), 
                                 m_stick.SmoothAxis(m_controllerDriver.getRawAxis(4)));
-    m_liftMotor.set(m_stick.SmoothAxis(m_controllerDriver.getTriggerAxis(GenericHID.Hand.kRight)) - m_stick.SmoothAxis(m_controllerDriver.getTriggerAxis(GenericHID.Hand.kLeft)));
+    m_liftMotor.set(m_stick.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonLT)) - m_stick.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonRT)));
 
 
 
