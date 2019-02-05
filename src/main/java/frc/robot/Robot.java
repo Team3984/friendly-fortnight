@@ -29,6 +29,7 @@ public class Robot extends TimedRobot {
   private static int kFrontRightChannel = 1;
   private static int kRearRightChannel = 0;
   private static int kLiftChannel = 4;
+  private static int kHatchChannel = 5;
 
   // What ever USB port we have the controller plugged into.
   private static int kGamePadChannel = 0;
@@ -63,6 +64,8 @@ public class Robot extends TimedRobot {
   private DeadBand m_rightTrigger;
 
   private SpeedController m_liftMotor;
+  
+  private SpeedController m_hatchMotor;
 
 
   
@@ -75,6 +78,8 @@ public class Robot extends TimedRobot {
 
     UsbCamera m_camera = CameraServer.getInstance().startAutomaticCapture(kUsbCameraChannel);
     m_camera.setResolution(240, 180);
+    //try increasing camera resolution
+    //m_camera.setResolution(352, 240);
 
     //m_camera.setVideoMode(VideoMode.PixelFormat.kYUYV,320,180,30);
 
@@ -84,6 +89,7 @@ public class Robot extends TimedRobot {
     Spark rearLeftSpark = new Spark(kRearLeftChannel);
     Spark rearRightSpark = new Spark(kRearRightChannel);
     Spark liftSpark = new Spark(kLiftChannel);
+    Spark hatchSpark = new Spark(kHatchChannel);
 
     // Invert the motors.
     // You may need to change or remove this to match your robot.
@@ -95,6 +101,10 @@ public class Robot extends TimedRobot {
     //Construct the lift motor
 
     m_liftMotor = liftSpark;
+    
+    //Construct the hatch motor
+    
+    m_hatchMotor = hatchSpark;
 
     // m_controllerDriver = new Joystick(kJoystickChannel);
     
@@ -121,6 +131,9 @@ public class Robot extends TimedRobot {
                                 m_stick.SmoothAxis(m_controllerDriver.getRawAxis(0)), 
                                 m_stick.SmoothAxis(m_controllerDriver.getRawAxis(4)));
     m_liftMotor.set(m_leftTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonLT)) - m_rightTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonRT)));
+    
+    //If this is set up right, it should allow the actuator to extend or retract by using left and right bumpers
+    m_hatchMotor.set(m_controllerDriver.getBumperPressed(GenericHID.Hand.kRight) - m_controllerDriver.getBumperPressed(GenericHID.Hand.kLeft));
 
 
 
