@@ -10,21 +10,23 @@ package frc.robot;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.GenericHID;// <-- Needed for xbox style controllers
-import edu.wpi.first.wpilibj.Spark;
+//import edu.wpi.first.wpilibj.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.SpeedController;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.*;// <-- gets us access to WPI_TalonSRX which works with wpilibj.drive.Mecanum
+import edu.wpi.first.wpilibj.SpeedControllerGroup;//for the cargo system
 import edu.wpi.first.wpilibj.TimedRobot;// <-- New for 2019, takes over for the depricated Iteritive robot
 import edu.wpi.first.wpilibj.XboxController;// <-- For using a gamepad controller
 import edu.wpi.first.wpilibj.drive.MecanumDrive;// <-- Needed for the drive base.
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;// <-- For writing data back to the drivers station.
-import edu.wpi.first.wpilibj.SpeedControllerGroup;//for the cargo system
 
 
 /**
  * This is a demo program showing how to use Mecanum control with the RobotDrive
- * class.  It's been modifed to call the Spark controllers, which use PWM. 
+ * class.  It's been modifed to call the WPI_TalonSRX controllers, which use PWM. 
  */
 public class Robot extends TimedRobot {
-  // These will need to be updated to the CAN Ids of the Spark's
+  // These will need to be updated to the CAN Ids of the WPI_TalonSRX's
   private static int kFrontLeftChannel = 3;
   private static int kRearLeftChannel = 2;
   private static int kFrontRightChannel = 1;
@@ -39,6 +41,12 @@ public class Robot extends TimedRobot {
 
   //mapping out the camera
   private static int kUsbCameraChannel = 0;
+
+  // The rate that the motor controller will speed up to full;
+  private static final double kRampUpRate = 1.5; 
+
+  // Setting the talons neutralmode to brake
+  private static final NeutralMode K_MODE = NeutralMode.Brake; 
 
   //Lets map out the buttons
   //private static final int kXboxButtonA = 1;
@@ -91,31 +99,48 @@ public class Robot extends TimedRobot {
     //m_camera.setVideoMode(VideoMode.PixelFormat.kYUYV,320,180,30);
 
     
-    Spark frontLeftSpark = new Spark(kFrontLeftChannel);
-    Spark frontRightSpark = new Spark(kFrontRightChannel);
-    Spark rearLeftSpark = new Spark(kRearLeftChannel);
-    Spark rearRightSpark = new Spark(kRearRightChannel);
-    Spark liftSpark = new Spark(kLiftChannel);
-    Spark hatchSpark = new Spark(kHatchChannel);
-    Spark rightCargoSpark = new Spark(kRightCargoChannel);
-    Spark leftCargoSpark = new Spark(kLeftCargoChannel);
-
+    WPI_TalonSRX frontLeftTalonSRX = new WPI_TalonSRX(kFrontLeftChannel);
+    WPI_TalonSRX frontRightTalonSRX = new WPI_TalonSRX(kFrontRightChannel);
+    WPI_TalonSRX rearLeftTalonSRX = new WPI_TalonSRX(kRearLeftChannel);
+    WPI_TalonSRX rearRightTalonSRX = new WPI_TalonSRX(kRearRightChannel);
+    WPI_TalonSRX liftTalonSRX = new WPI_TalonSRX(kLiftChannel);
+    WPI_TalonSRX hatchTalonSRX = new WPI_TalonSRX(kHatchChannel);
+    WPI_TalonSRX rightCargoTalonSRX = new WPI_TalonSRX(kRightCargoChannel);
+    WPI_TalonSRX leftCargoTalonSRX = new WPI_TalonSRX(kLeftCargoChannel);
+    
     // Invert the motors.
     // You may need to change or remove this to match your robot.
-    frontLeftSpark.setInverted(true);
-    rearRightSpark.setInverted(true);
-    
-    m_cargoSystem = new SpeedControllerGroup(leftCargoSpark, rightCargoSpark);
+    frontLeftTalonSRX.setInverted(true);
+    rearRightTalonSRX.setInverted(true);
 
-    m_robotDrive = new MecanumDrive(frontLeftSpark, rearLeftSpark, frontRightSpark, rearRightSpark);
+    /**
+     * Added to test out setting talon config some settings internal
+     * to the TalonSRXs
+     */
+    frontRightTalonSRX.configOpenloopRamp(kRampUpRate);
+    frontRightTalonSRX.setNeutralMode(K_MODE);
+
+    frontLeftTalonSRX.configOpenloopRamp(kRampUpRate);
+    frontLeftTalonSRX.setNeutralMode(K_MODE);
+    
+    rearRightTalonSRX.configOpenloopRamp(kRampUpRate);
+    rearRightTalonSRX.setNeutralMode(K_MODE);
+
+    rearLeftTalonSRX.configOpenloopRamp(kRampUpRate);
+    rearLeftTalonSRX.setNeutralMode(K_MODE);
+
+    
+    m_cargoSystem = new SpeedControllerGroup(leftCargoTalonSRX, rightCargoTalonSRX);
+
+    m_robotDrive = new MecanumDrive(frontLeftTalonSRX, rearLeftTalonSRX, frontRightTalonSRX, rearRightTalonSRX);
 
     //Construct the lift motor
 
-    m_liftMotor = liftSpark;
+    m_liftMotor = liftTalonSRX;
     
     //Construct the hatch motor
     
-    m_hatchMotor = hatchSpark;
+    m_hatchMotor = hatchTalonSRX;
 
     // m_controllerDriver = new Joystick(kJoystickChannel);
     
@@ -189,3 +214,4 @@ public class Robot extends TimedRobot {
   } // ************************ End of testPeriodic **************************
 
 }
+
