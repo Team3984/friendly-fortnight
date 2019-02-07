@@ -60,13 +60,15 @@ public class Robot extends TimedRobot {
 
   private MecanumDrive m_robotDrive;
 
-  private GenericHID m_controllerDriver;
+  private XboxController m_controllerDriver;
 
   private DeadBand m_stick;
   
   private DeadBand m_leftTrigger;
   
   private DeadBand m_rightTrigger;
+
+  private DeadBand m_leftBumper;
 
   private SpeedController m_liftMotor;
   
@@ -142,12 +144,24 @@ public class Robot extends TimedRobot {
     m_liftMotor.set(m_leftTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonLT)) - m_rightTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonRT)));
     
     //If this is set up right, it should allow the actuator to extend or retract by using left and right bumpers
-    m_hatchMotor.set(m_controllerDriver.getBumper(GenericHID.Hand.kRight) - m_controllerDriver.getBumper(GenericHID.Hand.kLeft));
     
-    //Place for cargo intake system
-    //if set up right, this should allow intake when A is pressed and ejection when B is pressed
-    m_cargoSystem.set(m_controllerDriver.getAButton() - m_controllerDriver.getBButton());
+    boolean hatchinSpeed = m_controllerDriver.getBumper(GenericHID.Hand.kRight);
+    
+    if (hatchinSpeed = true){
 
+      m_hatchMotor.set(1);
+
+    }
+
+    boolean hatchoutSpeed = m_controllerDriver.getBumper(GenericHID.Hand.kRight);
+
+    if (hatchoutSpeed = true){
+
+      m_hatchMotor.set(-1);
+      
+    }
+
+    //m_liftMotor.set(cargoraw);
 
 
     
