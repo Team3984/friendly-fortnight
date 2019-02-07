@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.TimedRobot;// <-- New for 2019, takes over for the 
 import edu.wpi.first.wpilibj.XboxController;// <-- For using a gamepad controller
 import edu.wpi.first.wpilibj.drive.MecanumDrive;// <-- Needed for the drive base.
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;// <-- For writing data back to the drivers station.
+import edu.wpi.first.wpilibj.SpeedControllerGroup;//for the cargo system
 
 
 /**
@@ -30,6 +31,8 @@ public class Robot extends TimedRobot {
   private static int kRearRightChannel = 0;
   private static int kLiftChannel = 4;
   private static int kHatchChannel = 5;
+  private static int kLeftCargoChannel = 6;
+  private static int kRightCargoChannel = 7;
 
   // What ever USB port we have the controller plugged into.
   private static int kGamePadChannel = 0;
@@ -52,6 +55,8 @@ public class Robot extends TimedRobot {
   
 
   private UsbCamera m_camera;
+  
+  private SpeedControllerGroup m_cargoSystem;
 
   private MecanumDrive m_robotDrive;
 
@@ -90,11 +95,15 @@ public class Robot extends TimedRobot {
     Spark rearRightSpark = new Spark(kRearRightChannel);
     Spark liftSpark = new Spark(kLiftChannel);
     Spark hatchSpark = new Spark(kHatchChannel);
+    Spark rightCargoSpark = new Spark(kRightCargoChannel);
+    Spark leftCargoSpark = new Spark(kLeftCargoChannel);
 
     // Invert the motors.
     // You may need to change or remove this to match your robot.
     frontLeftSpark.setInverted(true);
     rearRightSpark.setInverted(true);
+    
+    m_cargoSystem = new SpeedControllerGroup(leftCargoSpark, rightCargoSpark);
 
     m_robotDrive = new MecanumDrive(frontLeftSpark, rearLeftSpark, frontRightSpark, rearRightSpark);
 
@@ -133,7 +142,11 @@ public class Robot extends TimedRobot {
     m_liftMotor.set(m_leftTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonLT)) - m_rightTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonRT)));
     
     //If this is set up right, it should allow the actuator to extend or retract by using left and right bumpers
-    m_hatchMotor.set(m_controllerDriver.getBumperPressed(GenericHID.Hand.kRight) - m_controllerDriver.getBumperPressed(GenericHID.Hand.kLeft));
+    m_hatchMotor.set(m_controllerDriver.getBumper(GenericHID.Hand.kRight) - m_controllerDriver.getBumper(GenericHID.Hand.kLeft));
+    
+    //Place for cargo intake system
+    //if set up right, this should allow intake when A is pressed and ejection when B is pressed
+    m_cargoSystem.set(m_controllerDriver.getAButton() - m_controllerDriver.getBButton());
 
 
 
