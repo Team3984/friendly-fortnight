@@ -66,15 +66,15 @@ public class Robot extends TimedRobot {
   
   private SpeedControllerGroup m_cargoSystem;
 
-  private MecanumDrive m_robotDrive;
+  private MecanumDrive m_robotDrive; //hhhhhh
 
-  private XboxController m_controllerDriver;
+  private XboxController m_controllerDriver; //fcjekjdfej
 
   private DeadBand m_stick;
   
-  private DeadBand m_leftTrigger;
+  private DeadBand m_leftTrigger;  //fwerhfhih
   
-  private DeadBand m_rightTrigger;
+  private DeadBand m_rightTrigger;  //ejvejifji
 
   private DeadBand m_leftBumper;
 
@@ -214,4 +214,3 @@ public class Robot extends TimedRobot {
   } // ************************ End of testPeriodic **************************
 
 }
-
