@@ -102,48 +102,48 @@ public class Robot extends TimedRobot {
     //m_camera.setVideoMode(VideoMode.PixelFormat.kYUYV,320,180,30);
 
     
-    Spark frontLeftTalonSRX = new Spark(kFrontLeftChannel);
-    Spark frontRightTalonSRX = new Spark(kFrontRightChannel);
-    Spark rearLeftTalonSRX = new Spark(kRearLeftChannel);
-    Spark rearRightTalonSRX = new Spark(kRearRightChannel);
-    Spark liftTalonSRX = new Spark(kLiftChannel);
-    Spark hatchTalonSRX = new Spark(kHatchChannel);
-    Spark rightCargoTalonSRX = new Spark(kRightCargoChannel);
-    Spark leftCargoTalonSRX = new Spark(kLeftCargoChannel);
+    Spark frontLeftSpark = new Spark(kFrontLeftChannel);
+    Spark frontRightSpark = new Spark(kFrontRightChannel);
+    Spark rearLeftSpark = new Spark(kRearLeftChannel);
+    Spark rearRightSpark = new Spark(kRearRightChannel);
+    Spark liftSpark = new Spark(kLiftChannel);
+    Spark hatchSpark = new Spark(kHatchChannel);
+    Spark rightCargoSpark = new Spark(kRightCargoChannel);
+    Spark leftCargoSpark = new Spark(kLeftCargoChannel);
     
     // Invert the motors.
     // You may need to change or remove this to match your robot.
-    frontLeftTalonSRX.setInverted(true);
-    rearRightTalonSRX.setInverted(true);
+    frontLeftSpark.setInverted(true);
+    rearRightSpark.setInverted(true);
 
     /**
      * Added to test out setting talon config some settings internal
-     * to the TalonSRXs
+     * to the Sparks
      */
-    //frontRightTalonSRX.configOpenloopRamp(kRampUpRate);
-    //frontRightTalonSRX.setNeutralMode(K_MODE);
+    //frontRightSpark.configOpenloopRamp(kRampUpRate);
+    //frontRightSpark.setNeutralMode(K_MODE);
 
-    //frontLeftTalonSRX.configOpenloopRamp(kRampUpRate);
-    //frontLeftTalonSRX.setNeutralMode(K_MODE);
+    //frontLeftSpark.configOpenloopRamp(kRampUpRate);
+    //frontLeftSpark.setNeutralMode(K_MODE);
     
-    //rearRightTalonSRX.configOpenloopRamp(kRampUpRate);
-    //rearRightTalonSRX.setNeutralMode(K_MODE);
+    //rearRightSpark.configOpenloopRamp(kRampUpRate);
+    //rearRightSpark.setNeutralMode(K_MODE);
 
-    //rearLeftTalonSRX.configOpenloopRamp(kRampUpRate);
-    //rearLeftTalonSRX.setNeutralMode(K_MODE);
+    //rearLeftSpark.configOpenloopRamp(kRampUpRate);
+    //rearLeftSpark.setNeutralMode(K_MODE);
 
     
-    m_cargoSystem = new SpeedControllerGroup(leftCargoTalonSRX, rightCargoTalonSRX);
+    m_cargoSystem = new SpeedControllerGroup(leftCargoSpark, rightCargoSpark);
 
-    m_robotDrive = new MecanumDrive(frontLeftTalonSRX, rearLeftTalonSRX, frontRightTalonSRX, rearRightTalonSRX);
+    m_robotDrive = new MecanumDrive(frontLeftSpark, rearLeftSpark, frontRightSpark, rearRightSpark);
 
     //Construct the lift motor
 
-    m_liftMotor = liftTalonSRX;
+    m_liftMotor = liftSpark;
     
     //Construct the hatch motor
     
-    m_hatchMotor = hatchTalonSRX;
+    m_hatchMotor = hatchSpark;
 
     // m_controllerDriver = new Joystick(kJoystickChannel);
     
