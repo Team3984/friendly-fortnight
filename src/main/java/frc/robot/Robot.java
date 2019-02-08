@@ -9,6 +9,7 @@ package frc.robot;
 
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.GenericHID;// <-- Needed for xbox style controllers
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedController;
@@ -85,6 +86,8 @@ public class Robot extends TimedRobot {
   
   private SpeedController m_hatchMotor;
 
+  private Encoder m_liftEncoder;
+
 
   
   /**
@@ -131,7 +134,12 @@ public class Robot extends TimedRobot {
 
     //rearLeftSpark.configOpenloopRamp(kRampUpRate);
     //rearLeftSpark.setNeutralMode(K_MODE);
-
+    m_liftEncoder = new Encoder(0, 1, false, Encoder.EncodingType.k4X);
+    m_liftEncoder.setMaxPeriod(1);
+    m_liftEncoder.setMinRate(10);
+    m_liftEncoder.setDistancePerPulse(5);
+    m_liftEncoder.setReverseDirection(true);
+    m_liftEncoder.setSamplesToAverage(7);
     
     m_cargoSystem = new SpeedControllerGroup(leftCargoSpark, rightCargoSpark);
 
@@ -188,6 +196,9 @@ public class Robot extends TimedRobot {
       m_hatchMotor.set(-1);
       
     }
+
+    double distance = m_liftEncoder.getDistance();
+    System.out.println(distance);
 
     //m_liftMotor.set(cargoraw);
 
