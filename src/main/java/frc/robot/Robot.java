@@ -59,6 +59,11 @@ public class Robot extends TimedRobot {
   private static final int kXboxButtonLT = 2; // <-- Left Trigger
   private static final int kXboxButtonRT = 3; // <-- Right Trigger
 
+  private static final int kLeftStickX = 0; //left joystick X axis input
+  private static final int kLeftStickY = 1;  // left joystick Y axis input
+  private static final int kRightStickX = 4;  //right joystick X axis input
+  private static final int kRightStickY = 5;  // right joystick Y axis input
+
   //private static final double kRampUpRate = 0.0; // The rate that the motor controller will speed up to full;
   
 
@@ -66,15 +71,15 @@ public class Robot extends TimedRobot {
   
   private SpeedControllerGroup m_cargoSystem;
 
-  private MecanumDrive m_robotDrive; //hhhhhh
+  private MecanumDrive m_robotDrive; 
 
-  private XboxController m_controllerDriver; //fcjekjdfej
+  private XboxController m_controllerDriver; 
 
   private DeadBand m_stick;
   
-  private DeadBand m_leftTrigger;  //fwerhfhih
+  private DeadBand m_leftTrigger; 
   
-  private DeadBand m_rightTrigger;  //ejvejifji
+  private DeadBand m_rightTrigger;  
 
   private DeadBand m_leftBumper;
 
@@ -163,9 +168,9 @@ public class Robot extends TimedRobot {
 
     // If I did this right, this should allow for direction of travel to be set by using the left joystick
     // while the rotation of the robot is set by the right stick on the controller.
-    m_robotDrive.driveCartesian(m_stick.SmoothAxis(m_controllerDriver.getRawAxis(1)), 
-                                m_stick.SmoothAxis(m_controllerDriver.getRawAxis(0)), 
-                                m_stick.SmoothAxis(m_controllerDriver.getRawAxis(4)));
+    m_robotDrive.driveCartesian(m_stick.SmoothAxis(m_controllerDriver.getRawAxis(kLeftStickY)), 
+                                m_stick.SmoothAxis(-m_controllerDriver.getRawAxis(kLeftStickX)), 
+                                m_stick.SmoothAxis(-m_controllerDriver.getRawAxis(kRightStickX)));
     m_liftMotor.set(m_leftTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonLT)) - m_rightTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonRT)));
     
     //If this is set up right, it should allow the actuator to extend or retract by using left and right bumpers
