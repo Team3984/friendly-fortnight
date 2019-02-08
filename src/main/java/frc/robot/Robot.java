@@ -66,7 +66,7 @@ public class Robot extends TimedRobot {
 
   //private static final double kRampUpRate = 0.0; // The rate that the motor controller will speed up to full;
   
-  //Example
+  
   private UsbCamera m_camera;
   
   private SpeedControllerGroup m_cargoSystem;
