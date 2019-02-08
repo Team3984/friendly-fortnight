@@ -102,14 +102,14 @@ public class Robot extends TimedRobot {
     //m_camera.setVideoMode(VideoMode.PixelFormat.kYUYV,320,180,30);
 
     
-    WPI_TalonSRX frontLeftTalonSRX = new WPI_TalonSRX(kFrontLeftChannel);
-    WPI_TalonSRX frontRightTalonSRX = new WPI_TalonSRX(kFrontRightChannel);
-    WPI_TalonSRX rearLeftTalonSRX = new WPI_TalonSRX(kRearLeftChannel);
-    WPI_TalonSRX rearRightTalonSRX = new WPI_TalonSRX(kRearRightChannel);
-    WPI_TalonSRX liftTalonSRX = new WPI_TalonSRX(kLiftChannel);
-    WPI_TalonSRX hatchTalonSRX = new WPI_TalonSRX(kHatchChannel);
-    WPI_TalonSRX rightCargoTalonSRX = new WPI_TalonSRX(kRightCargoChannel);
-    WPI_TalonSRX leftCargoTalonSRX = new WPI_TalonSRX(kLeftCargoChannel);
+    Spark frontLeftTalonSRX = new Spark(kFrontLeftChannel);
+    Spark frontRightTalonSRX = new Spark(kFrontRightChannel);
+    Spark rearLeftTalonSRX = new Spark(kRearLeftChannel);
+    Spark rearRightTalonSRX = new Spark(kRearRightChannel);
+    Spark liftTalonSRX = new Spark(kLiftChannel);
+    Spark hatchTalonSRX = new Spark(kHatchChannel);
+    Spark rightCargoTalonSRX = new Spark(kRightCargoChannel);
+    Spark leftCargoTalonSRX = new Spark(kLeftCargoChannel);
     
     // Invert the motors.
     // You may need to change or remove this to match your robot.
