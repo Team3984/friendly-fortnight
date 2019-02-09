@@ -7,12 +7,14 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.GenericHID;// <-- Needed for xbox style controllers
+import edu.wpi.first.wpilibj.PWMTalonSRX;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;//for the cargo system
 import edu.wpi.first.wpilibj.TimedRobot;// <-- New for 2019, takes over for the depricated Iteritive robot
@@ -43,10 +45,10 @@ public class Robot extends TimedRobot {
   private static int kUsbCameraChannel = 0;
 
   // The rate that the motor controller will speed up to full;
-  //private static final double kRampUpRate = 1.5; 
+  private static final double kRampUpRate = 1.5; 
 
   // Setting the talons neutralmode to brake
-  //private static final NeutralMode K_MODE = NeutralMode.Brake; 
+  private static final NeutralMode K_MODE = NeutralMode.Brake; 
 
   //Lets map out the buttons
   //private static final int kXboxButtonA = 1;
@@ -83,9 +85,9 @@ public class Robot extends TimedRobot {
 
   private DeadBand m_leftBumper;
 
-  private SpeedController m_liftMotor;
+  private PWMTalonSRX m_liftMotor;
   
-  private SpeedController m_hatchMotor;
+  private PWMTalonSRX m_hatchMotor;
 
   private Encoder m_liftEncoder;
 
@@ -106,14 +108,14 @@ public class Robot extends TimedRobot {
     //m_camera.setVideoMode(VideoMode.PixelFormat.kYUYV,320,180,30);
 
     
-    TalonSRX frontLeftTalonSRX = new TalonSRX(kFrontLeftChannel);
-    TalonSRX frontRightTalonSRX = new TalonSRX(kFrontRightChannel);
-    TalonSRX rearLeftTalonSRX = new TalonSRX(kRearLeftChannel);
-    TalonSRX rearRightTalonSRX = new TalonSRX(kRearRightChannel);
-    TalonSRX liftTalonSRX = new TalonSRX(kLiftChannel);
-    TalonSRX hatchTalonSRX = new TalonSRX(kHatchChannel);
-    TalonSRX rightCargoTalonSRX = new TalonSRX(kRightCargoChannel);
-    TalonSRX leftCargoTalonSRX = new TalonSRX(kLeftCargoChannel);
+    PWMTalonSRX frontLeftTalonSRX = new PWMTalonSRX(kFrontLeftChannel);
+    PWMTalonSRX frontRightTalonSRX = new PWMTalonSRX(kFrontRightChannel);
+    PWMTalonSRX rearLeftTalonSRX = new PWMTalonSRX(kRearLeftChannel);
+    PWMTalonSRX rearRightTalonSRX = new PWMTalonSRX(kRearRightChannel);
+    PWMTalonSRX liftTalonSRX = new PWMTalonSRX(kLiftChannel);
+    PWMTalonSRX hatchTalonSRX = new PWMTalonSRX(kHatchChannel);
+    PWMTalonSRX rightCargoTalonSRX = new PWMTalonSRX(kRightCargoChannel);
+    PWMTalonSRX leftCargoTalonSRX = new PWMTalonSRX(kLeftCargoChannel);
     
     // Invert the motors.
     // You may need to change or remove this to match your robot.
@@ -135,6 +137,8 @@ public class Robot extends TimedRobot {
 
     //rearLeftTalonSRX.configOpenloopRamp(kRampUpRate);
     //rearLeftTalonSRX.setNeutralMode(K_MODE);
+
+    
     m_liftEncoder = new Encoder(0, 1, false, Encoder.EncodingType.k4X);
     m_liftEncoder.setMaxPeriod(1);
     m_liftEncoder.setMinRate(10);
