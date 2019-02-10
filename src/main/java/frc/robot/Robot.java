@@ -216,11 +216,11 @@ public class Robot extends TimedRobot {
     boolean cargoOutSpeed = m_controllerDriver.getAButton();
     boolean cargoInSpeed = m_controllerDriver.getXButton();
 
-    while (cargoInSpeed == true) {
+    if (cargoInSpeed == true) {
       m_cargoSystem.set(-1);
       
     }
-    while (cargoOutSpeed == true) {     //while the button is pressed the code will continue looping
+    if (cargoOutSpeed == true) {     //while the button is pressed the code will continue looping
       m_cargoSystem.set(1);
 
     }
