@@ -8,7 +8,7 @@
 package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
 
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
@@ -45,15 +45,15 @@ public class Robot extends TimedRobot {
   private static int kUsbCameraChannel = 0;
 
   // The rate that the motor controller will speed up to full;
-  private static final double kRampUpRate = 1.5; 
+  //private static final double kRampUpRate = 1.5; 
 
   // Setting the talons neutralmode to brake
-  private static final NeutralMode K_MODE = NeutralMode.Brake; 
+  //private static final NeutralMode K_MODE = NeutralMode.Brake; 
 
   //Lets map out the buttons
-  //private static final int kXboxButtonA = 1;
+  private static final int kXboxButtonA = 1;
   //private static final int kXboxButtonB = 2;
-  //private static final int kXboxButtonX = 3;
+  private static final int kXboxButtonX = 3;
   //private static final int kXboxButtonY = 4;
 
   //private static final int kXboxButtonLB = 5; // <-- Left Button
@@ -82,8 +82,6 @@ public class Robot extends TimedRobot {
   private DeadBand m_leftTrigger; 
   
   private DeadBand m_rightTrigger;  
-
-  private DeadBand m_leftBumper;
 
   private PWMTalonSRX m_liftMotor;
   
@@ -184,11 +182,15 @@ public class Robot extends TimedRobot {
                                 m_stick.SmoothAxis(-m_controllerDriver.getRawAxis(kRightStickX)));
     m_liftMotor.set(m_leftTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonLT)) - m_rightTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonRT)));
     
-    //If this is set up right, it should allow the actuator to extend or retract by using left and right bumpers
     
-    boolean hatchinSpeed = m_controllerDriver.getBumper(GenericHID.Hand.kRight);
     
-    if (hatchinSpeed = true){
+    
+   ///////////HATCH CODE////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+   //If this is set up right, it should allow the actuator to extend or retract by using left and right bumpers
+    boolean hatchinSpeed = m_controllerDriver.getBumper(GenericHID.Hand.kLeft);
+    
+    if (hatchinSpeed == true){
 
       m_hatchMotor.set(1);
 
@@ -196,12 +198,39 @@ public class Robot extends TimedRobot {
 
     boolean hatchoutSpeed = m_controllerDriver.getBumper(GenericHID.Hand.kRight);
 
-    if (hatchoutSpeed = true){
+    if (hatchoutSpeed == true){
 
       m_hatchMotor.set(-1);
       
     }
 
+    if (hatchoutSpeed == false && hatchinSpeed == false){
+
+      m_hatchMotor.set(0);
+    }
+    //////////////////HATCH CODE ///////////////////////////////////////////////////////////////////////////////////////////
+
+
+    ///////////////////////////CARGO CODE //////////////////////////////////////////////////////////////////////////////////
+
+    boolean cargoOutSpeed = m_controllerDriver.getAButton();
+    boolean cargoInSpeed = m_controllerDriver.getXButton();
+
+    while (cargoInSpeed == true) {
+      m_cargoSystem.set(-1);
+      
+    }
+    while (cargoOutSpeed == true) {     //while the button is pressed the code will continue looping
+      m_cargoSystem.set(1);
+
+    }
+    if (cargoInSpeed == false && cargoOutSpeed == false){  //When both buttons are not pressed
+      m_cargoSystem.set(0);
+
+    }
+
+
+    //////////////////////////CARGO CODE ///////////////////////////////////////////////////////////////////////////////////
     double distance = m_liftEncoder.getDistance();
     System.out.println(distance);
 
