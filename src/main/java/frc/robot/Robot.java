@@ -7,15 +7,12 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.GenericHID;// <-- Needed for xbox style controllers
-import edu.wpi.first.wpilibj.PWMTalonSRX;
-import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;//for the cargo system
 import edu.wpi.first.wpilibj.TimedRobot;// <-- New for 2019, takes over for the depricated Iteritive robot
 import edu.wpi.first.wpilibj.XboxController;// <-- For using a gamepad controller
@@ -25,10 +22,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;// <-- For writing da
 
 /**
  * This is a demo program showing how to use Mecanum control with the RobotDrive
- * class.  It's been modifed to call the TalonSRX controllers, which use PWM. 
+ * class.  It's been modifed to call the WPI_TalonSRX controllers, which use . 
  */
 public class Robot extends TimedRobot {
-  // These will need to be updated to the CAN Ids of the TalonSRX's
+  // These will need to be updated to the CAN Ids of the WPI_TalonSRX's
   private static int kFrontLeftChannel = 3;
   private static int kRearLeftChannel = 2;
   private static int kFrontRightChannel = 1;
@@ -83,11 +80,13 @@ public class Robot extends TimedRobot {
   
   private DeadBand m_rightTrigger;  
 
-  private PWMTalonSRX m_liftMotor;
+  private WPI_TalonSRX m_liftMotor;
   
-  private PWMTalonSRX m_hatchMotor;
+  private WPI_TalonSRX m_hatchMotor;
 
   private Encoder m_liftEncoder;
+
+  private SpeedBoolean sp;
 
 
   
@@ -106,35 +105,35 @@ public class Robot extends TimedRobot {
     //m_camera.setVideoMode(VideoMode.PixelFormat.kYUYV,320,180,30);
 
     
-    PWMTalonSRX frontLeftTalonSRX = new PWMTalonSRX(kFrontLeftChannel);
-    PWMTalonSRX frontRightTalonSRX = new PWMTalonSRX(kFrontRightChannel);
-    PWMTalonSRX rearLeftTalonSRX = new PWMTalonSRX(kRearLeftChannel);
-    PWMTalonSRX rearRightTalonSRX = new PWMTalonSRX(kRearRightChannel);
-    PWMTalonSRX liftTalonSRX = new PWMTalonSRX(kLiftChannel);
-    PWMTalonSRX hatchTalonSRX = new PWMTalonSRX(kHatchChannel);
-    PWMTalonSRX rightCargoTalonSRX = new PWMTalonSRX(kRightCargoChannel);
-    PWMTalonSRX leftCargoTalonSRX = new PWMTalonSRX(kLeftCargoChannel);
+    WPI_TalonSRX frontLeftWPI_TalonSRX = new WPI_TalonSRX(kFrontLeftChannel);
+    WPI_TalonSRX frontRightWPI_TalonSRX = new WPI_TalonSRX(kFrontRightChannel);
+    WPI_TalonSRX rearLeftWPI_TalonSRX = new WPI_TalonSRX(kRearLeftChannel);
+    WPI_TalonSRX rearRightWPI_TalonSRX = new WPI_TalonSRX(kRearRightChannel);
+    WPI_TalonSRX liftWPI_TalonSRX = new WPI_TalonSRX(kLiftChannel);
+    WPI_TalonSRX hatchWPI_TalonSRX = new WPI_TalonSRX(kHatchChannel);
+    WPI_TalonSRX rightCargoWPI_TalonSRX = new WPI_TalonSRX(kRightCargoChannel);
+    WPI_TalonSRX leftCargoWPI_TalonSRX = new WPI_TalonSRX(kLeftCargoChannel);
     
     // Invert the motors.
     // You may need to change or remove this to match your robot.
-    frontLeftTalonSRX.setInverted(true);
-    rearRightTalonSRX.setInverted(true);
+    frontLeftWPI_TalonSRX.setInverted(true);
+    rearRightWPI_TalonSRX.setInverted(true);
 
     /**
      * Added to test out setting talon config some settings internal
-     * to the TalonSRXs
+     * to the WPI_TalonSRXs
      */
-    //frontRightTalonSRX.configOpenloopRamp(kRampUpRate);
-    //frontRightTalonSRX.setNeutralMode(K_MODE);
+    //frontRightWPI_TalonSRX.configOpenloopRamp(kRampUpRate);
+    //frontRightWPI_TalonSRX.setNeutralMode(K_MODE);
 
-    //frontLeftTalonSRX.configOpenloopRamp(kRampUpRate);
-    //frontLeftTalonSRX.setNeutralMode(K_MODE);
+    //frontLeftWPI_TalonSRX.configOpenloopRamp(kRampUpRate);
+    //frontLeftWPI_TalonSRX.setNeutralMode(K_MODE);
     
-    //rearRightTalonSRX.configOpenloopRamp(kRampUpRate);
-    //rearRightTalonSRX.setNeutralMode(K_MODE);
+    //rearRightWPI_TalonSRX.configOpenloopRamp(kRampUpRate);
+    //rearRightWPI_TalonSRX.setNeutralMode(K_MODE);
 
-    //rearLeftTalonSRX.configOpenloopRamp(kRampUpRate);
-    //rearLeftTalonSRX.setNeutralMode(K_MODE);
+    //rearLeftWPI_TalonSRX.configOpenloopRamp(kRampUpRate);
+    //rearLeftWPI_TalonSRX.setNeutralMode(K_MODE);
 
     
     m_liftEncoder = new Encoder(0, 1, false, Encoder.EncodingType.k4X);
@@ -144,17 +143,17 @@ public class Robot extends TimedRobot {
     m_liftEncoder.setReverseDirection(true);
     m_liftEncoder.setSamplesToAverage(7);
     
-    m_cargoSystem = new SpeedControllerGroup(leftCargoTalonSRX, rightCargoTalonSRX);
+    m_cargoSystem = new SpeedControllerGroup(leftCargoWPI_TalonSRX, rightCargoWPI_TalonSRX);
 
-    m_robotDrive = new MecanumDrive(frontLeftTalonSRX, rearLeftTalonSRX, frontRightTalonSRX, rearRightTalonSRX);
+    m_robotDrive = new MecanumDrive(frontLeftWPI_TalonSRX, rearLeftWPI_TalonSRX, frontRightWPI_TalonSRX, rearRightWPI_TalonSRX);
 
     //Construct the lift motor
 
-    m_liftMotor = liftTalonSRX;
+    m_liftMotor = liftWPI_TalonSRX;
     
     //Construct the hatch motor
     
-    m_hatchMotor = hatchTalonSRX;
+    m_hatchMotor = hatchWPI_TalonSRX;
 
     // m_controllerDriver = new Joystick(kJoystickChannel);
     
@@ -165,6 +164,8 @@ public class Robot extends TimedRobot {
     m_rightTrigger = new DeadBand();
 
     m_stick = new DeadBand();
+
+    sp = new SpeedBoolean();
   
   } // *********************** End of roboInit **********************************
   
@@ -189,50 +190,20 @@ public class Robot extends TimedRobot {
     
    //If this is set up right, it should allow the actuator to extend or retract by using left and right bumpers
     boolean hatchoutSpeed = m_controllerDriver.getBumper(GenericHID.Hand.kLeft);
-    
-    if (hatchoutSpeed == true){
-
-      m_hatchMotor.set(0.5);
-
-    }
-
     boolean hatchinSpeed = m_controllerDriver.getBumper(GenericHID.Hand.kRight);
 
-    if (hatchinSpeed == true){
+    m_hatchMotor.set(sp.speedrate(hatchoutSpeed, hatchinSpeed));
 
-      m_hatchMotor.set(-0.5);
-      
-    }
-
-    if (hatchoutSpeed == false && hatchinSpeed == false){
-
-      m_hatchMotor.set(0);
-    }
-    //////////////////HATCH CODE ///////////////////////////////////////////////////////////////////////////////////////////
-
-
-    ///////////////////////////CARGO CODE //////////////////////////////////////////////////////////////////////////////////
 
     boolean cargoOutSpeed = m_controllerDriver.getAButton();
     boolean cargoInSpeed = m_controllerDriver.getXButton();
 
-    if (cargoInSpeed == true) {
-      m_cargoSystem.set(-.5);
-      
-    }
-    if (cargoOutSpeed == true) {     //while the button is pressed the code will continue looping
-      m_cargoSystem.set(.5);
-
-    }
-    if (cargoInSpeed == false && cargoOutSpeed == false){  //When both buttons are not pressed
-      m_cargoSystem.set(0);
-
-    }
+    m_cargoSystem.set(sp.speedrate(cargoOutSpeed, cargoInSpeed));
 
 
     //////////////////////////CARGO CODE ///////////////////////////////////////////////////////////////////////////////////
     double distance = m_liftEncoder.getDistance();
-    System.out.println(distance);
+    //System.out.println(distance);
 
     //m_liftMotor.set(cargoraw);
 
