@@ -192,7 +192,7 @@ public class Robot extends TimedRobot {
     
     if (hatchoutSpeed == true){
 
-      m_hatchMotor.set(1);
+      m_hatchMotor.set(0.5);
 
     }
 
@@ -200,7 +200,7 @@ public class Robot extends TimedRobot {
 
     if (hatchinSpeed == true){
 
-      m_hatchMotor.set(-1);
+      m_hatchMotor.set(-0.5);
       
     }
 
@@ -217,11 +217,11 @@ public class Robot extends TimedRobot {
     boolean cargoInSpeed = m_controllerDriver.getXButton();
 
     if (cargoInSpeed == true) {
-      m_cargoSystem.set(-1);
+      m_cargoSystem.set(-.5);
       
     }
     if (cargoOutSpeed == true) {     //while the button is pressed the code will continue looping
-      m_cargoSystem.set(1);
+      m_cargoSystem.set(.5);
 
     }
     if (cargoInSpeed == false && cargoOutSpeed == false){  //When both buttons are not pressed
