@@ -188,17 +188,17 @@ public class Robot extends TimedRobot {
    ///////////HATCH CODE////////////////////////////////////////////////////////////////////////////////////////////////////
     
    //If this is set up right, it should allow the actuator to extend or retract by using left and right bumpers
-    boolean hatchinSpeed = m_controllerDriver.getBumper(GenericHID.Hand.kLeft);
+    boolean hatchoutSpeed = m_controllerDriver.getBumper(GenericHID.Hand.kLeft);
     
-    if (hatchinSpeed == true){
+    if (hatchoutSpeed == true){
 
       m_hatchMotor.set(1);
 
     }
 
-    boolean hatchoutSpeed = m_controllerDriver.getBumper(GenericHID.Hand.kRight);
+    boolean hatchinSpeed = m_controllerDriver.getBumper(GenericHID.Hand.kRight);
 
-    if (hatchoutSpeed == true){
+    if (hatchinSpeed == true){
 
       m_hatchMotor.set(-1);
       
