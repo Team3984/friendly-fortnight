@@ -30,10 +30,10 @@ public class Robot extends TimedRobot {
   private static int kRearLeftChannel = 2;
   private static int kFrontRightChannel = 1;
   private static int kRearRightChannel = 0;
-  private static int kLiftChannel = 4;
-  private static int kHatchChannel = 5;
+  private static int kLiftChannel = 7;   //4 (DOES NOT EXIST)
+  private static int kHatchChannel = 4;  //5
   private static int kLeftCargoChannel = 6;
-  private static int kRightCargoChannel = 7;
+  private static int kRightCargoChannel = 4; //7 
 
   // What ever USB port we have the controller plugged into.
   private static int kGamePadChannel = 0;
@@ -204,6 +204,7 @@ public class Robot extends TimedRobot {
     //////////////////////////CARGO CODE ///////////////////////////////////////////////////////////////////////////////////
     double distance = m_liftEncoder.getDistance();
     //System.out.println(distance);
+    System.out.println(m_controllerDriver.getRawAxis(kXboxButtonLT));
 
     //m_liftMotor.set(cargoraw);
 
