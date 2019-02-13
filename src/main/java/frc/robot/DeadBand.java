@@ -7,7 +7,7 @@ package frc.robot;
  */
 public class DeadBand {
 
-    public static final double deadBandrate = 0.15;
+    public static final double deadBandrate = 0.08;
 
     public double SmoothAxis(double joyStickAxis){
         

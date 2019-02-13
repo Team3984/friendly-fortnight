@@ -182,23 +182,23 @@ public class Robot extends TimedRobot {
                                 m_stick.SmoothAxis(-m_controllerDriver.getRawAxis(kLeftStickX)), 
                                 m_stick.SmoothAxis(-m_controllerDriver.getRawAxis(kRightStickX)));
     double liftCmd = m_leftTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonLT)) - m_rightTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonRT));
-    double aproxStop = .5;  //assigning 1/2 way trigger press
+    double aproxStop = 0.22834645211696625;  //assigning 1/2 way trigger press
 
     m_liftMotor.set(liftCmd);         //Normal run
 
     boolean liftStop = m_controllerDriver.getBButton();   //B button stops lift
     
     if (liftStop == true){
-      m_liftMotor.set(aproxStop);     //OPTION 1
+      m_liftMotor.set(m_leftTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonLT)) - m_rightTrigger.SmoothAxis(aproxStop));     //OPTION 1
       //m_liftMotor.stopMotor();      //OPTION 2
     }
 
     if (liftStop == true && (liftCmd >= 0 || liftCmd <= 0)){  //Make sure 'B' overides 'triggers'
-      m_liftMotor.set(aproxStop);
+    m_liftMotor.set(m_leftTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonLT)) - m_rightTrigger.SmoothAxis(aproxStop));
     }
 
 
-    System.out.println(m_controllerDriver.getRawAxis(kXboxButtonLT));    //If all else fails, we'll manually assign the value of the trigger axis which holds the lift at a certain elevation
+    System.out.println(m_controllerDriver.getRawAxis(kXboxButtonRT));    //If all else fails, we'll manually assign the value of the trigger axis which holds the lift at a certain elevation
     
     
    ///////////HATCH CODE////////////////////////////////////////////////////////////////////////////////////////////////////
