@@ -181,9 +181,24 @@ public class Robot extends TimedRobot {
     m_robotDrive.driveCartesian(m_stick.SmoothAxis(m_controllerDriver.getRawAxis(kLeftStickY)), 
                                 m_stick.SmoothAxis(-m_controllerDriver.getRawAxis(kLeftStickX)), 
                                 m_stick.SmoothAxis(-m_controllerDriver.getRawAxis(kRightStickX)));
-    m_liftMotor.set(m_leftTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonLT)) - m_rightTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonRT)));
+    double cargoCmd = m_leftTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonLT)) - m_rightTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonRT));
+    double aproxStop = .5 * cargoCmd;  //assigning 1/2 way trigger press
+
+    m_liftMotor.set(cargoCmd);         //Normal run
+
+    boolean cargoStop = m_controllerDriver.getBButton();   //B button stops lift
     
-    
+    if (cargoStop == true){
+      m_liftMotor.set(aproxStop);     //OPTION 1
+      //m_liftMotor.stopMotor();      //OPTION 2
+    }
+
+    if (cargoStop == true && (cargoCmd >= 0 || cargoCmd <= 0)){  //Make sure 'B' overides 'triggers'
+      m_liftMotor.set(aproxStop);
+    }
+
+
+    System.out.println(m_controllerDriver.getRawAxis(kXboxButtonLT));    //If all else fails, we'll manually assign the value of the trigger axis which holds the lift at a certain elevation
     
     
    ///////////HATCH CODE////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -204,7 +219,6 @@ public class Robot extends TimedRobot {
     //////////////////////////CARGO CODE ///////////////////////////////////////////////////////////////////////////////////
     double distance = m_liftEncoder.getDistance();
     //System.out.println(distance);
-    System.out.println(m_controllerDriver.getRawAxis(kXboxButtonLT));
 
     //m_liftMotor.set(cargoraw);
 
