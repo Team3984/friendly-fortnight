@@ -181,19 +181,19 @@ public class Robot extends TimedRobot {
     m_robotDrive.driveCartesian(m_stick.SmoothAxis(m_controllerDriver.getRawAxis(kLeftStickY)), 
                                 m_stick.SmoothAxis(-m_controllerDriver.getRawAxis(kLeftStickX)), 
                                 m_stick.SmoothAxis(-m_controllerDriver.getRawAxis(kRightStickX)));
-    double cargoCmd = m_leftTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonLT)) - m_rightTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonRT));
-    double aproxStop = .5 * cargoCmd;  //assigning 1/2 way trigger press
+    double liftCmd = m_leftTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonLT)) - m_rightTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonRT));
+    double aproxStop = .5 * liftCmd;  //assigning 1/2 way trigger press
 
-    m_liftMotor.set(cargoCmd);         //Normal run
+    m_liftMotor.set(liftCmd);         //Normal run
 
-    boolean cargoStop = m_controllerDriver.getBButton();   //B button stops lift
+    boolean liftStop = m_controllerDriver.getBButton();   //B button stops lift
     
-    if (cargoStop == true){
+    if (liftStop == true){
       m_liftMotor.set(aproxStop);     //OPTION 1
       //m_liftMotor.stopMotor();      //OPTION 2
     }
 
-    if (cargoStop == true && (cargoCmd >= 0 || cargoCmd <= 0)){  //Make sure 'B' overides 'triggers'
+    if (liftStop == true && (liftCmd >= 0 || liftCmd <= 0)){  //Make sure 'B' overides 'triggers'
       m_liftMotor.set(aproxStop);
     }
 
