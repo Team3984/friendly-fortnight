@@ -10,11 +10,11 @@ package frc.robot;
  */
 public class SpeedBoolean {
 
-    public static final double rate = .5;
+    public static final double rate = 1;
 
     public double speedrate(boolean out, boolean in){
-        
-        if (in == true) {
+        //x is in and a is out
+        if (out == true) {
             return -rate;
             
           }
