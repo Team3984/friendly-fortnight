@@ -182,7 +182,7 @@ public class Robot extends TimedRobot {
                                 m_stick.SmoothAxis(-m_controllerDriver.getRawAxis(kLeftStickX)), 
                                 m_stick.SmoothAxis(-m_controllerDriver.getRawAxis(kRightStickX)));
     double liftCmd = m_leftTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonLT)) - m_rightTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonRT));
-    double aproxStop = .5 * liftCmd;  //assigning 1/2 way trigger press
+    double aproxStop = .5;  //assigning 1/2 way trigger press
 
     m_liftMotor.set(liftCmd);         //Normal run
 
