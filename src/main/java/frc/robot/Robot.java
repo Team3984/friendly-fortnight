@@ -28,11 +28,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;// <-- For writing da
 public class Robot extends TimedRobot {
   // These will need to be updated to the CAN Ids of the WPI_TalonSRX's
   private static int kFrontLeftChannel = 3;
-  private static int kRearLeftChannel = 2;
-  private static int kFrontRightChannel = 1;
-  private static int kRearRightChannel = 0;
-  private static int kLiftChannel = 7;   //4 (DOES NOT EXIST)
-  private static int kHatchChannel = 4;  //5
+  private static int kRearLeftChannel = 4;
+  private static int kFrontRightChannel = 2;
+  private static int kRearRightChannel = 1;
+  private static int kLiftChannel = 7;   //7
+  private static int kHatchChannel = 5;  //5
   private static int kCargoChannel = 6;
   //private static int kRightCargoChannel = 4; //7 
 
