@@ -7,10 +7,10 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.WPI_MotorSafetyImplem;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.cscore.UsbCamera;
+import edu.wpi.cscore.VideoMode;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.GenericHID;// <-- Needed for xbox style controllers
@@ -31,10 +31,10 @@ public class Robot extends TimedRobot {
   private static int kRearLeftChannel = 4;
   private static int kFrontRightChannel = 2;
   private static int kRearRightChannel = 1;
-  private static int kLiftChannel = 7;   //7
+  private static int kLiftChannel = 7;   //4 (DOES NOT EXIST)
   private static int kHatchChannel = 5;  //5
-  private static int kCargoChannel = 6;
-  //private static int kRightCargoChannel = 4; //7 
+  private static int kLeftCargoChannel = 6;
+  private static int kRightCargoChannel = 4; //7 
 
   // What ever USB port we have the controller plugged into.
   private static int kGamePadChannel = 0;
@@ -69,7 +69,7 @@ public class Robot extends TimedRobot {
   //hello 
   private UsbCamera m_camera;
   
-  private WPI_TalonSRX m_cargoSystem;
+  private SpeedControllerGroup m_cargoSystem;
 
   private MecanumDrive m_robotDrive; 
 
@@ -99,11 +99,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
 
     UsbCamera m_camera = CameraServer.getInstance().startAutomaticCapture(kUsbCameraChannel);
-    m_camera.setResolution(240, 180);
-    //try increasing camera resolution
-    //m_camera.setResolution(352, 240);
-
-    //m_camera.setVideoMode(VideoMode.PixelFormat.kYUYV,320,180,30);
+    m_camera.setVideoMode(VideoMode.PixelFormat.kYUYV,640,480,30);
 
     
     WPI_TalonSRX frontLeftWPI_TalonSRX = new WPI_TalonSRX(kFrontLeftChannel);
@@ -112,8 +108,8 @@ public class Robot extends TimedRobot {
     WPI_TalonSRX rearRightWPI_TalonSRX = new WPI_TalonSRX(kRearRightChannel);
     WPI_TalonSRX liftWPI_TalonSRX = new WPI_TalonSRX(kLiftChannel);
     WPI_TalonSRX hatchWPI_TalonSRX = new WPI_TalonSRX(kHatchChannel);
-    WPI_TalonSRX cargoSystem = new WPI_TalonSRX(kCargoChannel);
-  
+    WPI_TalonSRX rightCargoWPI_TalonSRX = new WPI_TalonSRX(kRightCargoChannel);
+    WPI_TalonSRX leftCargoWPI_TalonSRX = new WPI_TalonSRX(kLeftCargoChannel);
     
     // Invert the motors.
     // You may need to change or remove this to match your robot.
@@ -143,6 +139,8 @@ public class Robot extends TimedRobot {
     m_liftEncoder.setDistancePerPulse(5);
     m_liftEncoder.setReverseDirection(true);
     m_liftEncoder.setSamplesToAverage(7);
+    
+    m_cargoSystem = new SpeedControllerGroup(leftCargoWPI_TalonSRX, rightCargoWPI_TalonSRX);
 
     m_robotDrive = new MecanumDrive(frontLeftWPI_TalonSRX, rearLeftWPI_TalonSRX, frontRightWPI_TalonSRX, rearRightWPI_TalonSRX);
 
@@ -153,9 +151,6 @@ public class Robot extends TimedRobot {
     //Construct the hatch motor
     
     m_hatchMotor = hatchWPI_TalonSRX;
-
-    //Construct the cargo system
-    m_cargoSystem = cargoSystem;
 
     // m_controllerDriver = new Joystick(kJoystickChannel);
     
