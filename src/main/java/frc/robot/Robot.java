@@ -90,6 +90,8 @@ public class Robot extends TimedRobot {
 
   private SpeedBoolean sp;
 
+  private WheelSpeed wheelSpeed;
+
 
   
   /**
@@ -170,6 +172,8 @@ public class Robot extends TimedRobot {
     m_stick = new DeadBand();
 
     sp = new SpeedBoolean();
+
+    wheelSpeed = new WheelSpeed();
   
   } // *********************** End of roboInit **********************************
   
@@ -178,13 +182,14 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    // Need to come up with a way to tone down the joysticks
 
-    // If I did this right, this should allow for direction of travel to be set by using the left joystick
-    // while the rotation of the robot is set by the right stick on the controller.
-    m_robotDrive.driveCartesian(m_stick.SmoothAxis(m_controllerDriver.getRawAxis(kLeftStickY)), 
-                                m_stick.SmoothAxis(-m_controllerDriver.getRawAxis(kLeftStickX)), 
-                                m_stick.SmoothAxis(-m_controllerDriver.getRawAxis(kRightStickX)));
+/////////////////////////////////////////////////////////////////DRIVING/////////////////////////////////////////////////////
+    double speedPercent = .5;
+    m_robotDrive.driveCartesian(wheelSpeed.ySpeed(speedPercent), wheelSpeed.xSpeed(speedPercent), wheelSpeed.zRotation(speedPercent));
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    
     double liftCmd = m_leftTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonLT)) - m_rightTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonRT));
     double aproxStop = 0.4173228442668915;  //assigning 1/2 way trigger press
 
@@ -192,13 +197,9 @@ public class Robot extends TimedRobot {
 
     boolean liftStop = m_controllerDriver.getBButton();   //B button stops lift
     
-    if (liftStop == true){
+    if (liftStop == true || (liftStop == true && (liftCmd >= 0 || liftCmd <= 0))){
       m_liftMotor.set(m_leftTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonLT)) - m_rightTrigger.SmoothAxis(aproxStop));     //OPTION 1
       //m_liftMotor.stopMotor();      //OPTION 2
-    }
-
-    if (liftStop == true && (liftCmd >= 0 || liftCmd <= 0)){  //Make sure 'B' overides 'triggers'
-    m_liftMotor.set(m_leftTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonLT)) - m_rightTrigger.SmoothAxis(aproxStop));
     }
 
 
