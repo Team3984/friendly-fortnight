@@ -104,6 +104,7 @@ public class Robot extends TimedRobot {
     //m_camera.setResolution(352, 240);
 
     //m_camera.setVideoMode(VideoMode.PixelFormat.kYUYV,320,180,30);
+    //check
 
     
     WPI_TalonSRX frontLeftWPI_TalonSRX = new WPI_TalonSRX(kFrontLeftChannel);
