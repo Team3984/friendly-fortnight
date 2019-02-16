@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.WPI_MotorSafetyImplem;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.cscore.UsbCamera;
+import edu.wpi.cscore.VideoMode;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.GenericHID;// <-- Needed for xbox style controllers
@@ -99,7 +100,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
 
     UsbCamera m_camera = CameraServer.getInstance().startAutomaticCapture(kUsbCameraChannel);
-    m_camera.setResolution(240, 180);
+    m_camera.setVideoMode(VideoMode.PixelFormat.kYUYV, 640, 480, 30);
     //try increasing camera resolution
     //m_camera.setResolution(352, 240);
 
@@ -185,7 +186,7 @@ public class Robot extends TimedRobot {
                                 m_stick.SmoothAxis(-m_controllerDriver.getRawAxis(kLeftStickX)), 
                                 m_stick.SmoothAxis(-m_controllerDriver.getRawAxis(kRightStickX)));
     double liftCmd = m_leftTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonLT)) - m_rightTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonRT));
-    double aproxStop = 0.22834645211696625;  //assigning 1/2 way trigger press
+    double aproxStop = 0.4173228442668915;  //assigning 1/2 way trigger press
 
     m_liftMotor.set(liftCmd);         //Normal run
 
@@ -201,7 +202,8 @@ public class Robot extends TimedRobot {
     }
 
 
-    System.out.println(m_controllerDriver.getRawAxis(kXboxButtonRT));    //If all else fails, we'll manually assign the value of the trigger axis which holds the lift at a certain elevation
+    System.out.println(m_controllerDriver.getRawAxis(kXboxButtonRT));
+        //If all else fails, we'll manually assign the value of the trigger axis which holds the lift at a certain elevation
     
     
    ///////////HATCH CODE////////////////////////////////////////////////////////////////////////////////////////////////////
