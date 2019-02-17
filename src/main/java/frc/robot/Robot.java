@@ -92,6 +92,8 @@ public class Robot extends TimedRobot {
 
   private WheelSpeed wheelSpeed;
 
+  private StopLift stoplift;
+
 
   
   /**
@@ -174,6 +176,8 @@ public class Robot extends TimedRobot {
     sp = new SpeedBoolean();
 
     wheelSpeed = new WheelSpeed();
+
+    stoplift = new StopLift();
   
   } // *********************** End of roboInit **********************************
   
@@ -186,43 +190,31 @@ public class Robot extends TimedRobot {
 /////////////////////////////////////////////////////////////////DRIVING/////////////////////////////////////////////////////
     double speedPercent = .5;
     m_robotDrive.driveCartesian(wheelSpeed.ySpeed(speedPercent), wheelSpeed.xSpeed(speedPercent), wheelSpeed.zRotation(speedPercent));
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////LIFTING//////////////////////////////////////////////////////
 
 
     
     double liftCmd = m_leftTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonLT)) - m_rightTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonRT));
     double aproxStop = 0.4173228442668915;  //assigning 1/2 way trigger press
 
-    m_liftMotor.set(liftCmd);         //Normal run
-
     boolean liftStop = m_controllerDriver.getBButton();   //B button stops lift
-    
-    if (liftStop == true || (liftStop == true && (liftCmd >= 0 || liftCmd <= 0))){
-      m_liftMotor.set(m_leftTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonLT)) - m_rightTrigger.SmoothAxis(aproxStop));     //OPTION 1
-      //m_liftMotor.stopMotor();      //OPTION 2
-    }
 
-
-    System.out.println(m_controllerDriver.getRawAxis(kXboxButtonRT));
-        //If all else fails, we'll manually assign the value of the trigger axis which holds the lift at a certain elevation
+    stoplift.stoplift(liftCmd, aproxStop, liftStop);
     
     
-   ///////////HATCH CODE////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////HATCH CODE////////////////////////////////////////////////////////////////////////////////////////////////////
     
    //If this is set up right, it should allow the actuator to extend or retract by using left and right bumpers
     boolean hatchoutSpeed = m_controllerDriver.getBumper(GenericHID.Hand.kLeft);
     boolean hatchinSpeed = m_controllerDriver.getBumper(GenericHID.Hand.kRight);
-
-    m_hatchMotor.set(sp.speedrate(hatchoutSpeed, hatchinSpeed));
-
-
     boolean cargoOutSpeed = m_controllerDriver.getAButton();
     boolean cargoInSpeed = m_controllerDriver.getXButton();
 
+    m_hatchMotor.set(sp.speedrate(hatchoutSpeed, hatchinSpeed));
     m_cargoSystem.set(sp.speedrate(cargoOutSpeed, cargoInSpeed));
 
 
-    //////////////////////////CARGO CODE ///////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////CARGO CODE ///////////////////////////////////////////////////////////////////////////////////
     double distance = m_liftEncoder.getDistance();
     //System.out.println(distance);
 
