@@ -188,8 +188,8 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
 
 /////////////////////////////////////////////////////////////////DRIVING/////////////////////////////////////////////////////
-    double speedPercent = .5;
-    m_robotDrive.driveCartesian(wheelSpeed.ySpeed(speedPercent), wheelSpeed.xSpeed(speedPercent), wheelSpeed.zRotation(speedPercent));
+    
+    m_robotDrive.driveCartesian(wheelSpeed.ySpeed(), wheelSpeed.xSpeed(), wheelSpeed.zRotation());
 //////////////////////////////////////////////////////////////////LIFTING//////////////////////////////////////////////////////
 
 
