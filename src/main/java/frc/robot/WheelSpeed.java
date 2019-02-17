@@ -12,6 +12,7 @@ public class WheelSpeed {
     private static final int kLeftStickX = 0; //left joystick X axis input
     private static final int kLeftStickY = 1;  // left joystick Y axis input
     private static final int kRightStickX = 4;  //right joystick X axis input
+    public static final double speedPercent = .5; // speed limit
 
     private DeadBand m_stick = new DeadBand();
 
