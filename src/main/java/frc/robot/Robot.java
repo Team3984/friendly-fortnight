@@ -98,11 +98,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
 
     UsbCamera m_camera = CameraServer.getInstance().startAutomaticCapture(kUsbCameraChannel);
-    m_camera.setResolution(240, 180);
-    //try increasing camera resolution
-    //m_camera.setResolution(352, 240);
-
-    //m_camera.setVideoMode(VideoMode.PixelFormat.kYUYV,320,180,30);
+    m_camera.setVideoMode(VideoMode.PixelFormat.kYUYV,640,480,30);
 
     
     WPI_TalonSRX frontLeftWPI_TalonSRX = new WPI_TalonSRX(kFrontLeftChannel);
