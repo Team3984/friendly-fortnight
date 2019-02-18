@@ -27,14 +27,14 @@ public class StopLift {
 
     public void stoplift(double liftCmd, double aproxStop, boolean liftStop) {
         m_liftMotor = liftWPI_TalonSRX;
-        m_liftMotor.set(liftCmd);
- 
+
+        m_liftMotor.set(liftCmd); 
 
         if (liftStop == true || (liftStop == true && (liftCmd >= 0 || liftCmd <= 0))){
             rawTriggerGuide(aproxStop);
             //m_liftMotor.stopMotor();      //OPTION 2
           }
-        
+
     }
 
     public void rawTriggerGuide(double rawRTInput) {
@@ -43,6 +43,6 @@ public class StopLift {
         double rage = m_leftTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonLT)) - m_rightTrigger.SmoothAxis(rawRTInput);
 
         m_liftMotor.set(rage);
-        
+
     }
-}
+} 
