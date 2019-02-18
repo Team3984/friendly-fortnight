@@ -27,12 +27,14 @@ public class StopLift {
 
     public void stoplift(double liftCmd, double aproxStop, boolean liftStop) {
         m_liftMotor = liftWPI_TalonSRX;
-
-        m_liftMotor.set(liftCmd); 
+ 
 
         if (liftStop == true || (liftStop == true && (liftCmd >= 0 || liftCmd <= 0))){
             rawTriggerGuide(aproxStop);
             //m_liftMotor.stopMotor();      //OPTION 2
+          }else {
+            rawTriggerGuide(aproxStop);
+            m_liftMotor.set(liftCmd);
           }
         
     }
