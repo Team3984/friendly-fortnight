@@ -7,14 +7,12 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.WPI_MotorSafetyImplem;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.GenericHID;// <-- Needed for xbox style controllers
-import edu.wpi.first.wpilibj.SpeedControllerGroup;//for the cargo system
 import edu.wpi.first.wpilibj.TimedRobot;// <-- New for 2019, takes over for the depricated Iteritive robot
 import edu.wpi.first.wpilibj.XboxController;// <-- For using a gamepad controller
 import edu.wpi.first.wpilibj.drive.MecanumDrive;// <-- Needed for the drive base.
