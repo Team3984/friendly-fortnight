@@ -18,7 +18,7 @@ public class WheelSpeed {
     private static XboxController m_controllerDriver = new XboxController(kGamePadChannel);
 
 
-    private static double speedPercent = .05;
+    private static double speedPercent = .5;
 
     public double ySpeed() {
 
