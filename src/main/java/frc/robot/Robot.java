@@ -42,6 +42,7 @@ public class Robot extends TimedRobot {
 
   //mapping out the camera
   private static int kUsbCameraChannel = 0;
+  private static int kUsbCameraChannel2 = 1;
 
   // The rate that the motor controller will speed up to full;
   //private static final double kRampUpRate = 1.5; 
@@ -70,6 +71,8 @@ public class Robot extends TimedRobot {
   //hello 
   private UsbCamera m_camera;
   
+  private UsbCamera m_camera2;
+
   private WPI_TalonSRX m_cargoSystem;
 
   private MecanumDrive m_robotDrive; 
@@ -93,8 +96,6 @@ public class Robot extends TimedRobot {
   private WheelSpeed wheelSpeed;
 
   private StopLift stoplift;
-
-
   
   /**
    * This function if called when the robot boots up.
@@ -103,6 +104,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
 
+    UsbCamera m_camera2 = CameraServer.getInstance().startAutomaticCapture(kUsbCameraChannel2);
+    m_camera2.setVideoMode(VideoMode.PixelFormat.kYUYV, 640, 480, 30);
     UsbCamera m_camera = CameraServer.getInstance().startAutomaticCapture(kUsbCameraChannel);
     m_camera.setVideoMode(VideoMode.PixelFormat.kYUYV, 640, 480, 30);
     //try increasing camera resolution
@@ -180,6 +183,51 @@ public class Robot extends TimedRobot {
     stoplift = new StopLift();
   
   } // *********************** End of roboInit **********************************
+
+  @Override
+  public void autonomousInit() {
+    super.autonomousInit();
+  }
+  @Override
+  public void autonomousPeriodic() {
+  super.autonomousPeriodic();
+  
+/////////////////////////////////////////////////////////////////DRIVING/////////////////////////////////////////////////////
+    
+m_robotDrive.driveCartesian(wheelSpeed.ySpeed(), wheelSpeed.xSpeed(), wheelSpeed.zRotation());
+//////////////////////////////////////////////////////////////////LIFTING//////////////////////////////////////////////////////
+
+
+    
+    double liftCmd = m_leftTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonLT)) - m_rightTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonRT));
+    double aproxStop = 0.4173228442668915;  //assigning 1/2 way trigger press
+
+    boolean liftStop = m_controllerDriver.getBButton();   //B button stops lift
+
+    stoplift.stoplift(liftCmd, aproxStop, liftStop);
+    
+    
+///////////////HATCH CODE////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+   //If this is set up right, it should allow the actuator to extend or retract by using left and right bumpers
+    boolean hatchoutSpeed = m_controllerDriver.getBumper(GenericHID.Hand.kLeft);
+    boolean hatchinSpeed = m_controllerDriver.getBumper(GenericHID.Hand.kRight);
+    boolean cargoOutSpeed = m_controllerDriver.getAButton();
+    boolean cargoInSpeed = m_controllerDriver.getXButton();
+
+    m_hatchMotor.set(sp.speedrate(hatchoutSpeed, hatchinSpeed));
+    m_cargoSystem.set(sp.speedrate(cargoOutSpeed, cargoInSpeed));
+
+
+//////////////////////////////CARGO CODE ///////////////////////////////////////////////////////////////////////////////////
+    double distance = m_liftEncoder.getDistance();
+    //System.out.println(distance);
+
+    //m_liftMotor.set(cargoraw);
+
+
+    
+  }
   
   /**
    * When in teleop this function is called periodicly
