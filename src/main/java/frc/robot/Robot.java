@@ -42,6 +42,7 @@ public class Robot extends TimedRobot {
 
   //mapping out the camera
   private static int kUsbCameraChannel = 0;
+  private static int kUsbCameraChannel2 = 1;
 
   // The rate that the motor controller will speed up to full;
   //private static final double kRampUpRate = 1.5; 
@@ -69,6 +70,7 @@ public class Robot extends TimedRobot {
   
   //hello 
   private UsbCamera m_camera;
+  private UsbCamera m_camera2;
   
   private WPI_TalonSRX m_cargoSystem;
 
@@ -101,6 +103,8 @@ public class Robot extends TimedRobot {
 
     UsbCamera m_camera = CameraServer.getInstance().startAutomaticCapture(kUsbCameraChannel);
     m_camera.setVideoMode(VideoMode.PixelFormat.kYUYV, 640, 480, 30);
+    UsbCamera m_camera2 = CameraServer.getInstance().startAutomaticCapture(kUsbCameraChannel2);
+    m_camera2.setVideoMode(VideoMode.PixelFormat.kYUYV, 640, 480, 30);
     //try increasing camera resolution
     //m_camera.setResolution(352, 240);
 
@@ -176,6 +180,55 @@ public class Robot extends TimedRobot {
   /**
    * When in teleop this function is called periodicly
    */
+  @Override
+  public void autonomousInit() {
+    super.autonomousInit();
+  }
+  @Override
+  public void autonomousPeriodic() {
+  super.autonomousPeriodic();
+  m_robotDrive.driveCartesian(m_stick.SmoothAxis(m_controllerDriver.getRawAxis(kLeftStickY)), m_stick.SmoothAxis(-m_controllerDriver.getRawAxis(kLeftStickX)), m_stick.SmoothAxis(-m_controllerDriver.getRawAxis(kRightStickX)));
+
+  double liftCmd = m_leftTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonLT)) - m_rightTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonRT));
+  double aproxStop = 0.4173228442668915;  //assigning 1/2 way trigger press
+
+  m_liftMotor.set(liftCmd);         //Normal run
+
+  boolean liftStop = m_controllerDriver.getBButton();   //B button stops lift
+  
+  if (liftStop == true){
+    m_liftMotor.set(m_leftTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonLT)) - m_rightTrigger.SmoothAxis(aproxStop));     //OPTION 1
+    //m_liftMotor.stopMotor();      //OPTION 2
+  }
+
+  if (liftStop == true && (liftCmd >= 0 || liftCmd <= 0)){  //Make sure 'B' overides 'triggers'
+  m_liftMotor.set(m_leftTrigger.SmoothAxis(m_controllerDriver.getRawAxis(kXboxButtonLT)) - m_rightTrigger.SmoothAxis(aproxStop));
+  }
+
+
+  System.out.println(m_controllerDriver.getRawAxis(kXboxButtonRT));
+      //If all else fails, we'll manually assign the value of the trigger axis which holds the lift at a certain elevation
+  
+  
+ ///////////HATCH CODE////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+ //If this is set up right, it should allow the actuator to extend or retract by using left and right bumpers
+  boolean hatchoutSpeed = m_controllerDriver.getBumper(GenericHID.Hand.kLeft);
+  boolean hatchinSpeed = m_controllerDriver.getBumper(GenericHID.Hand.kRight);
+
+  m_hatchMotor.set(sp.speedrate(hatchoutSpeed, hatchinSpeed));
+
+
+  boolean cargoOutSpeed = m_controllerDriver.getAButton();
+  boolean cargoInSpeed = m_controllerDriver.getXButton();
+
+  m_cargoSystem.set(sp.speedrate(cargoOutSpeed, cargoInSpeed));
+
+
+  //////////////////////////CARGO CODE ///////////////////////////////////////////////////////////////////////////////////
+  //double distance = m_liftEncoder.getDistance();
+  //System.out.println(distance);
+}
   @Override
   public void teleopPeriodic() {
     // Need to come up with a way to tone down the joysticks
