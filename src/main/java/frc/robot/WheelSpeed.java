@@ -33,9 +33,15 @@ public class WheelSpeed {
 
     public double zRotation() {
         
-        double zRotation = m_stick.SmoothAxis((-m_controllerDriver.getRawAxis(kRightStickX)) * (speedPercent));
+        double zRotat = m_stick.SmoothAxis((-m_controllerDriver.getRawAxis(kRightStickX)) * (speedPercent));
         
-        return zRotation;
+        if (zRotat > .5) {
+            return 1;
+        }else if (zRotat < -.5) {
+            return -1;
+        }else {
+            return zRotat;
+        }
     }
     
 }
