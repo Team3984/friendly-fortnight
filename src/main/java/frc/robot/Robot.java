@@ -282,7 +282,44 @@ m_rightB.set(rightB);
 
 /////////////////////////////////////////////////////////////////DRIVING/////////////////////////////////////////////////////
     
-    m_robotDrive.driveCartesian(wheelSpeed.ySpeed(), wheelSpeed.xSpeed(), wheelSpeed.zRotation());
+
+
+
+
+    //m_robotDrive.driveCartesian(wheelSpeed.ySpeed(), wheelSpeed.xSpeed(), wheelSpeed.zRotation());
+
+    double ySpeed = wheelSpeed.ySpeed();
+    double xSpeed = wheelSpeed.xSpeed();
+    double zrot = wheelSpeed.zRotation();
+    
+    double leftF = ySpeed + xSpeed + zrot;
+    double leftB = ySpeed - xSpeed + zrot;
+    double rightF = ySpeed - xSpeed - zrot;
+    double rightB = ySpeed + xSpeed - zrot;
+    
+    double max = Math.max(Math.max(Math.abs(leftF),Math.abs(rightF)), Math.max(Math.abs(leftB), Math.abs(rightB)));
+    
+    if (max > 1){
+      leftF = leftF / max;
+      leftB = leftB / max;
+      rightF = rightF / max;
+      rightB = rightB / max;
+    }
+    
+    m_leftF.set(leftF);
+    m_leftB.set(leftB);
+    m_rightF.set(rightF);
+    m_rightB.set(rightB);
+
+
+
+
+
+
+
+
+
+
 //////////////////////////////////////////////////////////////////LIFTING//////////////////////////////////////////////////////
 
 
