@@ -96,6 +96,13 @@ public class Robot extends TimedRobot {
   private WheelSpeed wheelSpeed;
 
   private StopLift stoplift;
+
+  //Wheels:
+
+  private WPI_TalonSRX m_leftF;
+  private WPI_TalonSRX m_leftB;
+  private WPI_TalonSRX m_rightF;
+  private WPI_TalonSRX m_rightB;
   
   /**
    * This function if called when the robot boots up.
@@ -126,8 +133,9 @@ public class Robot extends TimedRobot {
     
     // Invert the motors.
     // You may need to change or remove this to match your robot.
-    frontLeftWPI_TalonSRX.setInverted(true);
-    rearRightWPI_TalonSRX.setInverted(true);
+
+    //frontRightWPI_TalonSRX.setInverted(true);
+    //rearRightWPI_TalonSRX.setInverted(true);
 
     /**
      * Added to test out setting talon config some settings internal
@@ -153,7 +161,7 @@ public class Robot extends TimedRobot {
     m_liftEncoder.setReverseDirection(true);
     m_liftEncoder.setSamplesToAverage(7);
 
-    m_robotDrive = new MecanumDrive(frontLeftWPI_TalonSRX, rearLeftWPI_TalonSRX, frontRightWPI_TalonSRX, rearRightWPI_TalonSRX);
+    //m_robotDrive = new MecanumDrive(frontLeftWPI_TalonSRX, rearLeftWPI_TalonSRX, frontRightWPI_TalonSRX, rearRightWPI_TalonSRX);
 
     //Construct the lift motor
 
@@ -165,6 +173,13 @@ public class Robot extends TimedRobot {
 
     //Construct the cargo system
     m_cargoSystem = cargoSystem;
+
+    //Robot wheels:
+
+    m_leftF = frontLeftWPI_TalonSRX;
+    m_leftB = rearLeftWPI_TalonSRX;
+    m_rightF = frontRightWPI_TalonSRX;
+    m_rightB = rearRightWPI_TalonSRX;
 
     // m_controllerDriver = new Joystick(kJoystickChannel);
     
@@ -193,8 +208,38 @@ public class Robot extends TimedRobot {
   super.autonomousPeriodic();
   
 /////////////////////////////////////////////////////////////////DRIVING/////////////////////////////////////////////////////
-    
-m_robotDrive.driveCartesian(wheelSpeed.ySpeed(), wheelSpeed.xSpeed(), wheelSpeed.zRotation());
+
+
+
+
+//m_robotDrive.driveCartesian(wheelSpeed.ySpeed(), wheelSpeed.xSpeed(), wheelSpeed.zRotation());
+
+double ySpeed = wheelSpeed.ySpeed();
+double xSpeed = wheelSpeed.xSpeed();
+double zrot = wheelSpeed.zRotation();
+
+double leftF = ySpeed + xSpeed + zrot;
+double leftB = ySpeed - xSpeed + zrot;
+double rightF = ySpeed - xSpeed - zrot;
+double rightB = ySpeed + xSpeed - zrot;
+
+double max = Math.max(Math.max(Math.abs(leftF),Math.abs(rightF)), Math.max(Math.abs(leftB), Math. abs(rightB)));
+
+if (max > 1){
+  leftF = leftF / max;
+  leftB = leftB / max;
+  rightF = rightF / max;
+  rightB = rightB / max;
+}
+
+m_leftF.set(leftF);
+m_leftB.set(leftB);
+m_rightF.set(rightF);
+m_rightB.set(rightB);
+
+
+
+
 //////////////////////////////////////////////////////////////////LIFTING//////////////////////////////////////////////////////
 
 
