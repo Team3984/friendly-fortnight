@@ -223,7 +223,7 @@ double leftB = ySpeed - xSpeed + zrot;
 double rightF = ySpeed - xSpeed - zrot;
 double rightB = ySpeed + xSpeed - zrot;
 
-double max = Math.max(Math.max(Math.abs(leftF),Math.abs(rightF)), Math.max(Math.abs(leftB), Math. abs(rightB)));
+double max = Math.max(Math.max(Math.abs(leftF),Math.abs(rightF)), Math.max(Math.abs(leftB), Math.abs(rightB)));
 
 if (max > 1){
   leftF = leftF / max;
