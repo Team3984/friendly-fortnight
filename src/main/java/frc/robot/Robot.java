@@ -134,8 +134,8 @@ public class Robot extends TimedRobot {
     // Invert the motors.
     // You may need to change or remove this to match your robot.
 
-    //frontRightWPI_TalonSRX.setInverted(true);
-    //rearRightWPI_TalonSRX.setInverted(true);
+    frontRightWPI_TalonSRX.setInverted(true);
+    rearRightWPI_TalonSRX.setInverted(true);
 
     /**
      * Added to test out setting talon config some settings internal
