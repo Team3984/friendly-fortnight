@@ -134,8 +134,8 @@ public class Robot extends TimedRobot {
     // Invert the motors.
     // You may need to change or remove this to match your robot.
 
-    frontRightWPI_TalonSRX.setInverted(true);
-    rearRightWPI_TalonSRX.setInverted(true);
+    frontLeftWPI_TalonSRX.setInverted(true);
+    rearLeftWPI_TalonSRX.setInverted(true);
 
     /**
      * Added to test out setting talon config some settings internal
@@ -215,8 +215,8 @@ public class Robot extends TimedRobot {
 //m_robotDrive.driveCartesian(wheelSpeed.ySpeed(), wheelSpeed.xSpeed(), wheelSpeed.zRotation());
 
 double ySpeed = wheelSpeed.ySpeed();
-double xSpeed = wheelSpeed.xSpeed();
-double zrot = wheelSpeed.zRotation();
+double xSpeed = wheelSpeed.zRotation();
+double zrot = wheelSpeed.xSpeed();
 
 double leftF = ySpeed + xSpeed + zrot;
 double leftB = ySpeed - xSpeed + zrot;
@@ -273,6 +273,13 @@ m_rightB.set(rightB);
 
     
   }
+
+
+
+
+
+
+  
   
   /**
    * When in teleop this function is called periodicly
