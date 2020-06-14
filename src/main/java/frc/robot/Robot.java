@@ -66,7 +66,9 @@ public class Robot extends TimedRobot {
   private static final int kRightStickX = 4;  //right joystick X axis input
   private static final int kRightStickY = 5;  // right joystick Y axis input
 
-  //private static final double kRampUpRate = 0.0; // The rate that the motor controller will speed up to full;
+  private static final double kRampUpRate = 1.5; // The rate that the motor controller will speed up to full;
+  private static final double kcargoAccelerationRate = 0.8; // The rate the lift motor controller will speed up to full
+  private static final NeutralMode K_MODE = NeutralMode.Brake;
   
   //hello 
   private UsbCamera m_camera;
@@ -133,17 +135,20 @@ public class Robot extends TimedRobot {
      * Added to test out setting talon config some settings internal
      * to the WPI_TalonSRXs
      */
-    //frontRightWPI_TalonSRX.configOpenloopRamp(kRampUpRate);
-    //frontRightWPI_TalonSRX.setNeutralMode(K_MODE);
+    frontRightWPI_TalonSRX.configOpenloopRamp(kRampUpRate);
+    frontRightWPI_TalonSRX.setNeutralMode(K_MODE);
 
-    //frontLeftWPI_TalonSRX.configOpenloopRamp(kRampUpRate);
-    //frontLeftWPI_TalonSRX.setNeutralMode(K_MODE);
+    frontLeftWPI_TalonSRX.configOpenloopRamp(kRampUpRate);
+    frontLeftWPI_TalonSRX.setNeutralMode(K_MODE);
     
-    //rearRightWPI_TalonSRX.configOpenloopRamp(kRampUpRate);
-    //rearRightWPI_TalonSRX.setNeutralMode(K_MODE);
+    rearRightWPI_TalonSRX.configOpenloopRamp(kRampUpRate);
+    rearRightWPI_TalonSRX.setNeutralMode(K_MODE);
 
-    //rearLeftWPI_TalonSRX.configOpenloopRamp(kRampUpRate);
-    //rearLeftWPI_TalonSRX.setNeutralMode(K_MODE);
+    rearLeftWPI_TalonSRX.configOpenloopRamp(kRampUpRate);
+    rearLeftWPI_TalonSRX.setNeutralMode(K_MODE);
+    
+    cargoSystem.configOpenloopRamp(kcargoAccelerationRate);
+    cargoSystem.setNeutralMode(K_MODE);
 
     
     m_liftEncoder = new Encoder(0, 1, false, Encoder.EncodingType.k4X);
